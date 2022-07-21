@@ -14,15 +14,22 @@ namespace ConsoleApp1
         {
 
             Deck_of_cards Deck = new Deck_of_cards();
-            int count = 0;
-            foreach (Card card in Deck) {
-                count++;
-                Console.WriteLine(count + " "  +  card.card_suit + " " + card.value);
-           
-            }
+
+            Game Game = new Game(Deck);
+
+            Game.ShowDeckCard(Deck);
+            Console.WriteLine("\n");
+            Game.ShowCPUCard();
+            Console.WriteLine("\n");
+            Game.ShowPlayerCard();
 
 
-              
+            //Game.Card_Value();
+            Game.GameVS_CPU();
+
+            Game.ShowCPUCard();
+            Console.WriteLine("\n");
+            Game.ShowPlayerCard();
 
             Console.ReadLine();
         }
@@ -95,15 +102,19 @@ namespace ConsoleApp1
 
         }
 
+
+
     }
 
 
 
 
             public class Deck_of_cards : IEnumerable
-    {
-        protected List <Card> deck = new List<Card>(36);
+        {
+              protected List <Card> deck = new List<Card>(36);
        
+
+
 
         public Deck_of_cards()
         {
@@ -129,12 +140,165 @@ namespace ConsoleApp1
 
       
 
+    }
+
+
+    public class Game {
+
+        public List<Card> Player_1 = new List<Card>();
+        public List<Card> CPU = new List<Card>();
+
+        protected Dictionary<string,int> Dic_value_ = new Dictionary<string, int>
+           {
+               { "Six", 6},
+               { "Seven", 7},
+               {  "Eight", 8},
+               {  "Nine", 9},
+               {  "Ten", 10},
+               {  "Jack", 11},
+               {  "Queen", 12},
+               {  "King", 13},
+               { "Ace", 14},
+             };
+
+        public Game(Deck_of_cards deck)
+
+        {
+
+            int count = 0;
+            foreach (Card card in deck)
+            {
+                count++;
+                if (count % 2 == 0)
+                {
+                    this.Player_1.Add(card);
+                }
+                else
+                    this.CPU.Add(card);
+
+
+            }
+        }
+
+        public void ShowPlayerCard()
+        {
+            Console.WriteLine("Player Deck: ");
+            int count = 0;
+            foreach (Card card in Player_1)
+            {
+                count++;
+                Console.WriteLine(count + " " + card.card_suit + " " + card.value);
+
+            }
+
+        }
+
+        public void ShowCPUCard()
+        {
+            Console.WriteLine("CPU Deck: ");
+            int count = 0;
+            foreach (Card card in CPU)
+            {
+                count++;
+                Console.WriteLine(count + " " + card.card_suit + " " + card.value);
+
+            }
+
+        }
+
+        public void ShowDeckCard(Deck_of_cards deck)
+        {
+            Console.WriteLine("Deck: ");
+            int count = 0;
+            foreach (Card card in deck)
+            {
+                count++;
+                Console.WriteLine(count + " " + card.card_suit + " " + card.value);
+
+            }
+
+        }
+
+
+
+        public void Card_Value()
+        {
+            Console.WriteLine(" Card_Value CPU Deck: ");
+
+
+            Console.WriteLine(Dic_value_[CPU[0].value]);
+
+        }
+    
+
+       
+
+
+
+
+
+
+           public void GameVS_CPU()
+           {
+
+               Console.WriteLine("Lets Play\n");
+
+               List<Card> table  = new List<Card>(2);
+               string num;
+               int _num;
+               int _num_;
+               bool end = true;
+               Random RND = new Random();
+               while (end) {
+                   Console.WriteLine("Get num of your card \n");
+                   _num_= Convert.ToInt32(RND.Next(0, this.CPU.Count()));
+                   num = Console.ReadLine();
+                   _num = Convert.ToInt32(num)-1;
+
+                Console.WriteLine("Your card: ");
+                Player_1[_num].Show_card();
+                Console.WriteLine("CPU card: ");
+                CPU[_num_].Show_card();
+
+                 if (Dic_value_[CPU[_num_].value] > Dic_value_[Player_1[_num].value]|| Dic_value_[CPU[_num_].value] == Dic_value_[Player_1[_num].value])
+                 {
+                    CPU.Add(Player_1[_num]);
+                    Player_1.RemoveAt(_num);
+                 }
+                else { 
+                    Player_1.Add(CPU[_num_]);
+                    CPU.RemoveAt(_num_);
+                    
+                }
+                   
+
+                end = false;
+               }
+
+           
+
+           }
+
+
+
+
+
 
 
 
     }
 
+
+
+
 }
+
+
+    
+    
+
+
+
 
 
 
