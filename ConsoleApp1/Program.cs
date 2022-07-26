@@ -17,8 +17,7 @@ namespace ConsoleApp1
 
             Game Game = new Game(Deck);
 
-            Game.ShowDeckCard(Deck);
-            Console.WriteLine("\n");
+         
             Game.ShowCPUCard();
             Console.WriteLine("\n");
             Game.ShowPlayerCard();
@@ -29,7 +28,8 @@ namespace ConsoleApp1
 
             Game.ShowCPUCard();
             Console.WriteLine("\n");
-            Game.ShowPlayerCard();
+           // Game.ShowPlayerCard();
+      
 
             Console.ReadLine();
         }
@@ -232,48 +232,98 @@ namespace ConsoleApp1
     
 
        
-
-
-
-
-
-
            public void GameVS_CPU()
            {
 
                Console.WriteLine("Lets Play\n");
 
-               List<Card> table  = new List<Card>(2);
-               string num;
+                             
                int _num;
                int _num_;
                bool end = true;
                Random RND = new Random();
                while (end) {
-                   Console.WriteLine("Get num of your card \n");
+                Console.WriteLine("\n");
+                Console.WriteLine("Get num of your card \n");
                    _num_= Convert.ToInt32(RND.Next(0, this.CPU.Count()));
-                   num = Console.ReadLine();
-                   _num = Convert.ToInt32(num)-1;
+                   _num = Convert.ToInt32(Console.ReadLine()) - 1;
 
+                bool WtF = true; // тут немного запутался, не мог зайти в цикл без переменной , пришлось создавать.  
+
+                while (WtF) // если тут вместо переменно1 ставить выражение- программа сыпалась.
+                    {
+                    if (_num > Player_1.Count())
+                    {
+                        Console.WriteLine("Get num of your card again, there is no card with this number \n");
+                        _num = Convert.ToInt32(Console.ReadLine()) - 1;
+                    }
+
+                    if (_num <= Player_1.Count())
+                    { WtF = false; }
+                    }
+
+
+                
                 Console.WriteLine("Your card: ");
-                Player_1[_num].Show_card();
-                Console.WriteLine("CPU card: ");
-                CPU[_num_].Show_card();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Player_1[_num].Show_card();
+                    Console.ResetColor();
 
-                 if (Dic_value_[CPU[_num_].value] > Dic_value_[Player_1[_num].value]|| Dic_value_[CPU[_num_].value] == Dic_value_[Player_1[_num].value])
-                 {
-                    CPU.Add(Player_1[_num]);
-                    Player_1.RemoveAt(_num);
-                 }
-                else { 
-                    Player_1.Add(CPU[_num_]);
-                    CPU.RemoveAt(_num_);
-                    
+                    Console.WriteLine("CPU card: ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    CPU[_num_].Show_card();
+                    Console.ResetColor();
+
+
+                    if (Dic_value_[CPU[_num_].value] < Dic_value_[Player_1[_num].value] || Dic_value_[CPU[_num_].value] == Dic_value_[Player_1[_num].value])
+                    {
+                        Player_1.Add(CPU[_num_]);
+                        CPU.RemoveAt(_num_);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Player take the card");
+                        Console.ResetColor();
+
+                    }
+                    else
+                    {
+                        CPU.Add(Player_1[_num]);
+                        Player_1.RemoveAt(_num);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("CPU take the card");
+                        Console.ResetColor();
+
+                    }
+                Console.WriteLine("\n");
+                Console.WriteLine("click enter \n");
+                Console.ReadLine();
+                Console.Clear();
+                ShowPlayerCard();
+             
+                if (this.Player_1.Count() == 0)
+                {
+                    end = false;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("CPU WINS!!!");
+                    Console.ResetColor();
                 }
-                   
+                if (this.CPU.Count() == 0)
+                {
+                    end = false;
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("PLAYER WINS!!!");
+                    Console.ResetColor();
+                }
 
-                end = false;
-               }
+
+
+
+                if (this.Player_1.Count() == 0 || this.CPU.Count() == 0)
+                { end = false; 
+                }
+
+            
+
+            }
 
            
 
@@ -282,13 +332,7 @@ namespace ConsoleApp1
 
 
 
-
-
-
-
     }
-
-
 
 
 }
